@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Récupérer le code source depuis votre système de contrôle de version
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                // Construire l'image Docker de Mautic
+                sh 'docker build -t mautic .'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Exécuter les tests sur l'image Docker de Mautic
+                sh 'docker run --rm mautic php /var/www/html/bin/console mautic:tests:run'
+            }
+        }
+    }
+}
