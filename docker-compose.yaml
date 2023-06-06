@@ -1,76 +1,76 @@
 version: '3'
 
 services:
-  mautic1:
+  mautic4:
     image: mautic/mautic:v4-apache
-    container_name: mautic1
+    container_name: mautic4
     restart: always
     ports:
-      - "8080:80"
+      - "8084:80"
     environment:
-      MAUTIC_URL: http://gmarket.gnet.tn/client1
-      MAUTIC_DB_HOST: db1
-      MAUTIC_DB_USER: mautic1
+      MAUTIC_URL: http://gmarket.gnet.tn/client4
+      MAUTIC_DB_HOST: db4
+      MAUTIC_DB_USER: mautic4
       MAUTIC_DB_PASSWORD: mautic1_password
-      MAUTIC_DB_NAME: mautic1_db
+      MAUTIC_DB_NAME: mautic4_db
       MAUTIC_RUN_CRON_JOBS: 'false'
     volumes:
-      - mautic1_data:/var/www/html
+      - mautic4_data:/var/www/html
 
-  mautic2:
+  mautic5:
     image: mautic/mautic:v4-apache
-    container_name: mautic2
+    container_name: mautic5
     restart: always
     ports:
-      - "8083:80"
+      - "8085:80"
     environment:
-      MAUTIC_URL: http://gmarket.gnet.tn/client2
-      MAUTIC_DB_HOST: db2
-      MAUTIC_DB_USER: mautic2
-      MAUTIC_DB_PASSWORD: mautic2_password
-      MAUTIC_DB_NAME: mautic2_db
+      MAUTIC_URL: http://gmarket.gnet.tn/client5
+      MAUTIC_DB_HOST: db5
+      MAUTIC_DB_USER: mautic5
+      MAUTIC_DB_PASSWORD: mautic5_password
+      MAUTIC_DB_NAME: mautic5_db
       MAUTIC_RUN_CRON_JOBS: 'false'
     volumes:
-      - mautic2_data:/var/www/html
+      - mautic5_data:/var/www/html
 
-  db1:
+  db4:
     image: mariadb:10.6
-    container_name: mautic_db1
+    container_name: mautic_db4
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: mautic1_db
-      MYSQL_USER: mautic1
-      MYSQL_PASSWORD: mautic1_password
+      MYSQL_DATABASE: mautic4_db
+      MYSQL_USER: mautic4
+      MYSQL_PASSWORD: mautic4_password
     ports:
-      - "3306:3306"  # Change the host port to a different port, e.g., "3307:3306"
+      - "3308:3306"  # Change the host port to a different port, e.g., "3307:3306"
     volumes:
-      - db1_data:/var/lib/mysql
+      - db4_data:/var/lib/mysql
 
-  db2:
+  db5:
     image: mariadb:10.6
-    container_name: mautic_db2
+    container_name: mautic_db5
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: mautic2_db
-      MYSQL_USER: mautic2
-      MYSQL_PASSWORD: mautic2_password
+      MYSQL_DATABASE: mautic5_db
+      MYSQL_USER: mautic5
+      MYSQL_PASSWORD: mautic5_password
     ports:
-      - "3307:3306"  # Use a different host port, e.g., "3307:3306"
+      - "3309:3306"  # Use a different host port, e.g., "3307:3306"
     volumes:
-      - db2_data:/var/lib/mysql
+      - db5_data:/var/lib/mysql
 
  
 
 
 
 volumes:
-  mautic1_data:
-  mautic2_data:
+  mautic4_data:
+  mautic5_data:
  # mautic3_data:
-  db1_data:
-  db2_data:
+  db4_data:
+  db5_data:
 #  db3_data:                            
 
 
