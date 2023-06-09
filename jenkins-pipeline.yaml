@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Construire l'image Docker de Mautic
-                sh 'docker build -t mautic .'
+                sh 'docker-compose build'
             }
         }
 
