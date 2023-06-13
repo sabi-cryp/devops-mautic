@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mautic-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mautic
+  template:
+    metadata:
+      labels:
+        app: mautic
+    spec:
+      volumes:
+        - name: mautic-data
+          persistentVolumeClaim:
+            claimName: mautic-pvc
+      containers:
+        - name: mautic
+          image: mautic/mautic:v4-apache
+          env:
+            - name: MAUTIC_DB_HOST
+              value: mysql-service
+            - name: MAUTIC_DB_NAME
+              value: mautic
+            - name: MAUTIC_DB_USER
+              value: mautic
+            - name: MAUTIC_DB_PASSWORD
+              value: password
+          ports:
+            - containerPort: 80
