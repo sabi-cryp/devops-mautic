@@ -79,8 +79,8 @@ docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
 
 # Step 7: Push the Docker image to Nexus
 docker login -u skerchaoui -p skerchaoui23#
-docker tag $CLIENT_NAME-mautic:latest $DOCKER_REGISTRY_URL/$CLIENT_NAME-mautic:latest
-docker push $DOCKER_REGISTRY_URL/$CLIENT_NAME-mautic:latest
+docker tag $CLIENT_NAME nexus.gnet.tn/gmarket/$CLIENT_NAME:v4-apache
+docker push nexus.gnet.tn/gmarket/$CLIENT:v4-apache
 
 # Step 8: If you want to deploy to Kubernetes, apply the Kubernetes configuration
 kubectl apply -f "$K8S_CONFIG_FILE"
