@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client001-mautic-deployment
+  labels:
+    app: client001-mautic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client001-mautic
+  template:
+    metadata:
+      labels:
+        app: client001-mautic
+    spec:
+      containers:
+        - name: client001-mautic
+          image: mautic/mautic:v4-apache  # Use the Mautic v4 Apache image
+          ports:
+            - containerPort: 80
+  # Define other Kubernetes resources (e.g., Service) if needed
