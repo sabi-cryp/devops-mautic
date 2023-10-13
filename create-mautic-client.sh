@@ -12,7 +12,7 @@ CLIENT_URL="http://10.10.204.6:8080/$CLIENT_NAME"  # Unique URL for the client
 # Step 1: Create a Database for the Client
 # In this step, the script connects to the database server and creates a dedicated database for the client. The database name is derived from the client name.
 
-mysql -u root -p -e "CREATE DATABASE $CLIENT_NAME;"
+# mysql -u root -p -e "CREATE DATABASE $CLIENT_NAME;"
 
 # Step 2: Configure Mautic for the Client
 # This is a placeholder for configuring Mautic for the client. You would set up Mautic settings, templates, and other configurations specific to the client's needs. This might involve copying configuration files, applying templates, and more.
