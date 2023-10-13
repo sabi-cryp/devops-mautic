@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# Input: Client name
+# Input: Client name and port number
 CLIENT_NAME=$1
+PORT_NUMBER=$2
 
 # Step 1: Create a directory for the client
-CLIENT_DIR="/path/to/clients/$CLIENT_NAME"
+CLIENT_DIR="/var/lib/jenkins/$CLIENT_NAME"
 mkdir -p "$CLIENT_DIR"
 
 # Step 2: Create a Docker Compose file for the client
@@ -16,7 +17,7 @@ services:
     image: mautic/mautic:v4-apache
     container_name: $CLIENT_NAME-mautic
     ports:
-      - "8001:80"
+      - "$PORT_NUMBER:80"
     volumes:
       - ./mautic-data-$CLIENT_NAME:/var/www/html
     environment:
@@ -63,7 +64,7 @@ spec:
     app: $CLIENT_NAME-mautic
   ports:
     - protocol: TCP
-      port: 80
+      port: $PORT_NUMBER
       targetPort: 80
   type: NodePort  # Use the appropriate service type for your setup
 EOL
