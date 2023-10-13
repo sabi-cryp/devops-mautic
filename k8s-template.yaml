@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mautic-{{CLIENT_NAME}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mautic-{{CLIENT_NAME}}
+  template:
+    metadata:
+      labels:
+        app: mautic-{{CLIENT_NAME}}
+    spec:
+      containers:
+      - name: mautic-{{CLIENT_NAME}}
+        image: {{NEXUS_REGISTRY}}:{{BUILD_NUMBER}}
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mautic-{{CLIENT_NAME}}-service
+spec:
+  selector:
+    app: mautic-{{CLIENT_NAME}}
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort
