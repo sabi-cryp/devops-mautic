@@ -1,0 +1,9 @@
+version: '3'
+services:
+  client001-mautic:
+    image: mautic/mautic:v4-apache  # Use the Mautic v4 Apache image
+    ports:
+      - "8001:80"
+    volumes:
+      - ./mautic-data-client001:/var/www/html
+  # Define other services if needed
