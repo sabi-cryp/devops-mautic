@@ -21,13 +21,13 @@ services:
       - "$PORT_NUMBER:80"
     environment:
       MAUTIC_URL: http://gmarket.gnet.tn/$CLIENT_NAME
-      MAUTIC_DB_HOST: db-$CLIENT_NAME
+      MAUTIC_DB_HOST: db-${CLIENT_NAME}
       MAUTIC_DB_USER: ${CLIENT_NAME}
       MAUTIC_DB_PASSWORD: ${CLIENT_NAME}_password
-      MAUTIC_DB_NAME: $CLIENT_NAME_db
+      MAUTIC_DB_NAME: ${CLIENT_NAME}_db
       MAUTIC_RUN_CRON_JOBS: 'false'
     volumes:
-      - $CLIENT_NAME_data:/var/www/html
+      - ${CLIENT_NAME}_data:/var/www/html
 
   db-${CLIENT_NAME}:
     image: mariadb:10.6
