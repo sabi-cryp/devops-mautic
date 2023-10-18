@@ -14,20 +14,20 @@ cat <<EOL > "$DOCKER_COMPOSE_FILE"
 version: '3'
 
 services:
-  ${CLIENT_NAME}-mautic:
+  ${CLIENT_NAME}:
     image: mautic/mautic:v4-apache
-    container_name: ${CLIENT_NAME}-mautic
+    container_name: ${CLIENT_NAME}
     ports:
       - "$PORT_NUMBER:80"
     environment:
       MAUTIC_URL: http://gmarket.gnet.tn/$CLIENT_NAME
       MAUTIC_DB_HOST: db-$CLIENT_NAME
-      MAUTIC_DB_USER: ${CLIENT_NAME}-user
-      MAUTIC_DB_PASSWORD: ${CLIENT_NAME}-password
-      MAUTIC_DB_NAME: $CLIENT_NAME
+      MAUTIC_DB_USER: ${CLIENT_NAME}
+      MAUTIC_DB_PASSWORD: ${CLIENT_NAME}_password
+      MAUTIC_DB_NAME: $CLIENT_NAME_db
       MAUTIC_RUN_CRON_JOBS: 'false'
     volumes:
-      - ./mautic-data-$CLIENT_NAME:/var/www/html
+      - $CLIENT_NAME_data:/var/www/html
 
   db-${CLIENT_NAME}:
     image: mariadb:10.6
@@ -36,7 +36,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: ${CLIENT_NAME}_db
-      MYSQL_USER: ${CLIENT_NAME}_user
+      MYSQL_USER: ${CLIENT_NAME}
       MYSQL_PASSWORD: ${CLIENT_NAME}_password
     ports:
       - "$((PORT_NUMBER + 1000)):3306"
@@ -44,7 +44,7 @@ services:
       - db-${CLIENT_NAME}_data:/var/lib/mysql
 
 volumes:
-  mautic-data-${CLIENT_NAME}:
+  ${CLIENT_NAME}_data:
   db-${CLIENT_NAME}_data:
 EOL
 
