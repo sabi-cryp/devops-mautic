@@ -104,17 +104,14 @@ docker tag mautic/mautic:v4-apache nexus.gnet.tn:8443/gmarket/$CLIENT_NAME:v4-ap
 docker push nexus.gnet.tn:8443/gmarket/$CLIENT:v4-apache
 
 # Step 8: Create Nginx Configuration
-NGINX_CONFIG_FILE="/etc/nginx/sites-available/client_routes"
+NGINX_CONFIG_FILE="/etc/nginx/sites-available/client_${CLIENT_NAME}"
 cat <<EOL > "$NGINX_CONFIG_FILE"
 server {
     listen 80;
     server_name 10.10.204.7;
 
-    location ~ ^/client00(\d+)/(.*) {
-        proxy_pass http://10.10.204.7:\$1;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    location /${CLIENT_NAME} {
+        proxy_pass http://10.10.204.7:$PORT_NUMBER;
     }
 }
 EOL
