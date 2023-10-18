@@ -109,10 +109,10 @@ server {
 EOL
 
 # Step 6: Create Symbolic Link for Nginx Configuration
-sudo ln -s "$NGINX_CONFIG_FILE" /etc/nginx/sites-enabled/
+ ln -s "$NGINX_CONFIG_FILE" /etc/nginx/sites-enabled/
 
 # Step 7: Test Nginx Configuration
-sudo nginx -t
+ nginx -t
 
 echo "Client $CLIENT_NAME has been created successfully."
 
