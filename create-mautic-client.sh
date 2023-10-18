@@ -92,7 +92,18 @@ EOL
 
 # Step 5: Additional client-specific setup
 # Add more steps here to perform any other client-specific configurations
-# Step 5: Create Nginx Configuration
+
+echo "Client $CLIENT_NAME has been created successfully."
+
+# Step 6: Deploy the client using Docker Compose
+docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
+
+# Step 7: Push the Docker image to Nexus
+docker login -u skerchaoui -p skerchaoui23#
+docker tag mautic/mautic:v4-apache nexus.gnet.tn:8443/gmarket/$CLIENT_NAME:v4-apache
+docker push nexus.gnet.tn:8443/gmarket/$CLIENT:v4-apache
+
+# Step 8: Create Nginx Configuration
 NGINX_CONFIG_FILE="/etc/nginx/sites-available/client_routes"
 cat <<EOL > "$NGINX_CONFIG_FILE"
 server {
@@ -108,22 +119,12 @@ server {
 }
 EOL
 
-# Step 6: Create Symbolic Link for Nginx Configuration
+# Step 9: Create Symbolic Link for Nginx Configuration
  ln -s "$NGINX_CONFIG_FILE" /etc/nginx/sites-enabled/
 
-# Step 7: Test Nginx Configuration
+# Step 10: Test Nginx Configuration
  nginx -t
 
-echo "Client $CLIENT_NAME has been created successfully."
-
-# Step 6: Deploy the client using Docker Compose
-docker-compose -f "$DOCKER_COMPOSE_FILE" up -d
-
-# Step 7: Push the Docker image to Nexus
-docker login -u skerchaoui -p skerchaoui23#
-docker tag mautic/mautic:v4-apache nexus.gnet.tn:8443/gmarket/$CLIENT_NAME:v4-apache
-docker push nexus.gnet.tn:8443/gmarket/$CLIENT:v4-apache
-
-# Step 8: If you want to deploy to Kubernetes, apply the Kubernetes configuration
+# Step 11: If you want to deploy to Kubernetes, apply the Kubernetes configuration
 kubectl apply -f "$K8S_CONFIG_FILE"
 kubectl apply -f "$K8S_SERVICE_FILE"
