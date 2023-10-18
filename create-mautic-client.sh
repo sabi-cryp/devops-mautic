@@ -92,6 +92,27 @@ EOL
 
 # Step 5: Additional client-specific setup
 # Add more steps here to perform any other client-specific configurations
+# Step 5: Create Nginx Configuration
+NGINX_CONFIG_FILE="/etc/nginx/sites-available/client_routes"
+cat <<EOL > "$NGINX_CONFIG_FILE"
+server {
+    listen 80;
+    server_name 10.10.204.7;
+
+    location ~ ^/client00(\d+)/(.*) {
+        proxy_pass http://10.10.204.7:\$1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    }
+}
+EOL
+
+# Step 6: Create Symbolic Link for Nginx Configuration
+sudo ln -s "$NGINX_CONFIG_FILE" /etc/nginx/sites-enabled/
+
+# Step 7: Test Nginx Configuration
+sudo nginx -t
 
 echo "Client $CLIENT_NAME has been created successfully."
 
