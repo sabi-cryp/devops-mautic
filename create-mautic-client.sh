@@ -12,19 +12,40 @@ mkdir -p "$CLIENT_DIR"
 DOCKER_COMPOSE_FILE="$CLIENT_DIR/docker-compose-$CLIENT_NAME.yml"
 cat <<EOL > "$DOCKER_COMPOSE_FILE"
 version: '3'
+
 services:
-  $CLIENT_NAME-mautic:
+  ${CLIENT_NAME}-mautic:
     image: mautic/mautic:v4-apache
-    container_name: $CLIENT_NAME-mautic
+    container_name: ${CLIENT_NAME}-mautic
     ports:
       - "$PORT_NUMBER:80"
+    environment:
+      MAUTIC_URL: http://gmarket.gnet.tn/$CLIENT_NAME
+      MAUTIC_DB_HOST: db-$CLIENT_NAME
+      MAUTIC_DB_USER: ${CLIENT_NAME}-user
+      MAUTIC_DB_PASSWORD: ${CLIENT_NAME}-password
+      MAUTIC_DB_NAME: $CLIENT_NAME
+      MAUTIC_RUN_CRON_JOBS: 'false'
     volumes:
       - ./mautic-data-$CLIENT_NAME:/var/www/html
+
+  db-${CLIENT_NAME}:
+    image: mariadb:10.6
+    container_name: db-${CLIENT_NAME}
+    restart: always
     environment:
-      - MAUTIC_DB_HOST=db
-      - MAUTIC_DB_NAME=$CLIENT_NAME
-      - MAUTIC_DB_USER=$CLIENT_NAME-user
-      - MAUTIC_DB_PASSWORD=$CLIENT_NAME-password
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: ${CLIENT_NAME}_db
+      MYSQL_USER: ${CLIENT_NAME}_user
+      MYSQL_PASSWORD: ${CLIENT_NAME}_password
+    ports:
+      - "$((PORT_NUMBER + 1000)):3306"
+    volumes:
+      - db-${CLIENT_NAME}_data:/var/lib/mysql
+
+volumes:
+  mautic-data-${CLIENT_NAME}:
+  db-${CLIENT_NAME}_data:
 EOL
 
 # Step 3: Create a Kubernetes configuration file for the client
