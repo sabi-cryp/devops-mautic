@@ -128,7 +128,17 @@ EOL
 
 # Step 10: Test Nginx Configuration
  nginx -t
+# Define the custom hostname
+CUSTOM_HOSTNAME="${CLIENT_NAME}-gmarket.gnet.tn"
 
+# Specify the desired IP address
+IP_ADDRESS="10.10.204.7"
+
+# Add the custom hostname with the specified IP address to /etc/hosts
+echo "$IP_ADDRESS $CUSTOM_HOSTNAME" | sudo tee -a /etc/hosts
+
+# Rest of your existing script here...
+# ...
 # Step 11: If you want to deploy to Kubernetes, apply the Kubernetes configuration
 kubectl apply -f "$K8S_CONFIG_FILE"
 kubectl apply -f "$K8S_SERVICE_FILE"
