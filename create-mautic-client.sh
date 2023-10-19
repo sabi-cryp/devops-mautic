@@ -108,11 +108,18 @@ NGINX_CONFIG_FILE="/etc/nginx/sites-available/client_${CLIENT_NAME}"
 cat <<EOL > "$NGINX_CONFIG_FILE"
 server {
     listen 80;
-    server_name 10.10.204.7;
+    server_name ${CLIENT_NAME}-gmarket.gnet.tn;
 
-    location /${CLIENT_NAME} {
-        proxy_pass http://10.10.204.7:$PORT_NUMBER;
+    location / {
+        proxy_pass http://10.10.204.7:${PORT_NUMBER};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
+
+    error_log /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
 }
 EOL
 
