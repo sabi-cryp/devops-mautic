@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mautic4:
-    image: nexus.gnet.tn:8443/gmarket/test-mautic:v4-apache
+    image: nexus.gnet.tn:8443/gmarket/tmautic:v4-apache
     container_name: mautic4
     restart: always
     ports:
@@ -18,7 +18,7 @@ services:
       - mautic4_data:/var/www/html
 
   mautic5:
-    image: nexus.gnet.tn:8443/gmarket/test-mautic:v4-apache
+    image: nexus.gnet.tn:8443/gmarket/tmautic:v4-apache
     container_name: mautic5
     restart: always
     ports:
