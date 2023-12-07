@@ -43,7 +43,7 @@ services:
       MYSQL_USER: mautic4
       MYSQL_PASSWORD: mautic4_password
     ports:
-      - "3308:3306"  # Change the host port to a different port, e.g., "3307:3306"
+      - "3307:3306"  # Change the host port to a different port, e.g., "3307:3306"
     volumes:
       - db4_data:/var/lib/mysql
 
