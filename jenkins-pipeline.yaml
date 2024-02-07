@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    triggers {
+        pollSCM('*/2 * * * *') // Déclencher toutes les deux minutes
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -8,7 +11,36 @@ pipeline {
                 sh 'git clone https://github.com/sabi-cryp/devops-mautic.git '
             }
         }
+        stage('Create Mautic Clients') {
+            steps {
+                script {
+                    dir('GMarket') {
+                        def currentPort = STARTING_PORT
+                        def clientNames = sh(script: "curl -s http://localhost:30003/get_clients | jq -r '.[].name'", returnStdout: true).trim().split()
+                       
+                        for (def clientName in clientNames) {
+                            // Increment the port number for each client
+                            def portNumber = currentPort.toString()
 
+                            // Use a custom hostname based on the client name if needed
+                            def customHostname = "gmarket.gnet.tn"
+
+                           
+
+                            // Construct the Nginx configuration file path
+                            def nginxConfigFile = "${NGINX_CONFIG_PATH}/${clientName}"
+
+                            sh "chmod +x create-mautic-client.sh"
+                            sh "echo '${ip} ${customHostname}' | tee -a /etc/hosts"
+                            sh "bash create-mautic-client.sh ${clientName} ${portNumber}"
+
+                            // Increment the port for the next client
+                            currentPort++
+                        }
+                    }
+                }
+            }
+        }
         stage('Build') {
             steps {
                 // Construire l'image Docker de Mautic
@@ -20,6 +52,17 @@ pipeline {
             steps {
                 // Exécuter les tests sur l'image Docker de Mautic
                 sh 'docker run --rm mautic php /var/www/html/bin/console mautic:tests:run'
+            }
+        }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    def clientNames = sh(script: "curl -s http://localhost:30003/get_clients | jq -r '.[].name'", returnStdout: true).trim().split()
+                    //for (def clientName in ['globanet', 'gnet', 'biat']) {
+                    for (def clientName in clientNames) {
+                        sh "kubectl apply -f /var/lib/jenkins/${clientName}/k8s-config-${clientName}.yaml"
+                    }
+                }
             }
         }
     }
